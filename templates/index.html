@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSE Hackathon Portal</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            
+            font-family: 'Inter', sans-serif;
+            /* Background matching MovieMagic: Deep purple to dark blue gradient */
+            background: radial-gradient(circle at top right, #2d1b4d, #161b33 50%, #0d0e1a);
+            background-attachment: fixed;
+            color: #ffffff;
+            min-height: 200vh;
+        }
+
+        /* Navbar with subtle blur */
+        .navbar {
+            background: rgba(13, 14, 26, 0.8) !important; /* MovieMagic Dark */
+            -webkit-backdrop-filter: blur(15px);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            
+            /* SET HEIGHT TO MATCH LOGO */
+            min-height: 110px; 
+            display: flex;
+            align-items: center;
+            padding: 0 !important; /* Remove default padding to control height exactly */
+        }
+        /* 2. Center the text vertically within that new height */
+        .navbar-brand {
+            font-size: 2.2rem !important; /* Slightly larger text to match the scale */
+            font-weight: 800;
+            line-height: 110px; /* Matches the navbar height for perfect centering */
+            margin: 0;
+        }
+        /* 3. Ensure the logo container stays inside the strip */
+        .logo-container {
+            height: 110px;
+            display: flex;
+            align-items: center;
+            padding-right: 20px;
+        }
+
+        .bitm-logo-large {
+            height: 90px; /* Logo is slightly smaller than the 110px bar */
+            background: #ffffff;
+            padding: 8px;
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(163, 97, 255, 0.4);
+            border: 2px solid #a361ff;
+        }
+        /* .logo-container {
+            position: absolute;
+            right: 30px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 1000;
+        }
+
+        .bitm-logo-large {
+            height: 85px; 
+            width: auto;
+            background: rgba(255, 255, 255, 0.95); 
+            padding: 8px;
+            border-radius: 5px;
+            box-shadow: 0 0 20px rgba(163, 97, 255, 0.4); 
+            border: 2px solid rgba(163, 97, 255, 0.6);
+            transition: all 0.3s ease;
+        } */
+
+        .bitm-logo-large:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 30px rgba(255, 94, 145, 0.6); /* Pink glow on hover */
+            border-color: #ff5e91;
+        }
+        /* Statistics Cards - Translucent & Modern */
+        .stats-card {
+            background: rgba(255, 255, 255, 0.05) !important;
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            transition: all 0.3s ease;
+        }
+        .stats-value {
+            font-size: 2.8rem;
+            font-weight: 800;
+            margin: 0;
+            color: #ffffff !important; /* Forces text to white */
+            text-shadow: 0 0 15px rgba(163, 97, 255, 0.8) !important;
+            /* text-shadow: 0 0 20px rgba(163, 97, 255, 0.8), 0 0 10px rgba(255, 255, 255, 0.3); */
+        }
+        .stats-card p {
+            color: #ffffff !important; /* Forces white color */
+            opacity: 1 !important;    /* Ensures no transparency is hiding it */
+            text-shadow: 0 0 10px rgba(163, 97, 255, 0.8) !important; /* Adds a nice purple glow */
+        }
+
+        /* Specifically for the 'High Prize Won' label which has inline red color in your screenshot */
+        .stats-card p[style*="color: #ff5e91"] {
+            color: #ff5e91 !important; /* Keeps the pink color but makes it bright */
+            font-weight: 800;
+        }
+        /* .stats-label {
+            color: #ffffff !important; /* Makes the labels white too 
+            opacity: 0.9;
+            font-weight: 700;
+            letter-spacing: 2px;
+        } */
+        .stats-label {
+            color: #ffffff !important;
+            opacity: 1 !important;
+            font-weight: 700 !important;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 5px;
+        }
+        .stats-card:hover {
+            background: rgba(255, 255, 255, 0.1) !important;
+            transform: translateY(-5px);
+            border-color: #a361ff;
+        }
+
+        /* Year Buttons matching MovieMagic gradient */
+        .btn-custom {
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 8px 20px;
+            margin: 0 5px;
+            transition: 0.3s;
+        }
+
+        .btn-custom.active, .btn-custom:hover {
+            background: linear-gradient(135deg, #a361ff, #ff5e91);
+            border: none;
+            color: white;
+            box-shadow: 0 4px 15px rgba(163, 97, 255, 0.4);
+        }
+
+        /* Table Container - Semi-transparent Dark */
+        .table-container {
+            background: rgba(64, 64, 156, 0.892);
+            border-radius: 20px;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .table { color: white; border-color: rgba(255, 255, 255, 0.1); }
+        .table thead { background: rgba(255, 255, 255, 0.05); }
+
+        /* Search Input */
+        .form-control {
+            background: rgba(255, 255, 255, 0.05);
+            border: 3px solid rgba(255, 255, 255, 0.2);
+            color: white !important;
+            border-radius: 10px;
+        }
+        .form-control:focus {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: #ffffff;
+            box-shadow: none;
+        }
+        /* Ensure the search box text is white when typing */
+        #searchInput {
+            color: #ffffff !important;
+            background: rgba(255, 255, 255, 0.1) !important;
+        }
+        
+        #searchInput::placeholder {
+            color: rgba(255, 255, 255, 0.6) !important;
+        }
+        .badge-winner {
+            background: linear-gradient(135deg, #ffca28, #ffa000);
+            color: #fcfcfc;
+            font-weight: bold;
+            padding: 5px 12px;
+        }
+        /* Fix for Modal Input Visibility */
+        #addRecordModal .form-control {
+            background-color: rgba(255, 255, 255, 0.05) !important;
+            color: white !important; /* Forces typed text to be white */
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        }
+
+        /* Fix for Placeholder text visibility */
+        #addRecordModal .form-control::placeholder {
+            color: rgba(255, 255, 255, 0.5) !important;
+            opacity: 1;
+        }
+
+        /* Ensure the text stays white even when clicking/typing */
+        #addRecordModal .form-control:focus {
+            background-color: rgba(255, 255, 255, 0.1) !important;
+            color: white !important;
+            border-color: #a361ff !important;
+            box-shadow: 0 0 0 0.25rem rgba(163, 97, 255, 0.25);
+        }
+        /* Fix visibility for table text */
+        #hackathonTable tbody tr td {
+            color: #1a1a2e !important; /* Deep dark blue/black for readability */
+            vertical-align: middle;
+        }
+        .offcanvas {
+            background: rgba(13, 14, 26, 0.95) !important;
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(20px);
+            border-right: 1px solid rgba(163, 97, 255, 0.3) !important;
+        }
+
+        .offcanvas-header {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        /* Ensure the student name stands out */
+        .student-name-cell {
+            font-weight: 700 !important;
+            color: #0d0e1a !important;
+        }
+
+        /* Fix Action icon visibility */
+        .btn-outline-danger {
+            color: #dc3545 !important;
+            border-color: #dc3545 !important;
+        }
+
+        .btn-outline-danger:hover {
+            background-color: #dc3545 !important;
+            color: white !important;
+        }
+        /* Ensure table icons are visible and dark */
+        #hackathonTable .bi {
+            color: #dc3545 !important; /* Standard Bootstrap Red */
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        /* Optional: add a hover effect so the user knows it's clickable */
+        #hackathonTable .btn-outline-danger:hover .bi {
+            color: white !important;
+        }
+        .admin-toggle-btn {
+        top: 25px;
+        left: 25px;
+        width: 50px;
+        height: 50px;
+        z-index: 1100;
+        background: rgba(163, 97, 255, 0.15) !important;
+        -webkit-backdrop-filter: blur(10px);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(163, 97, 255, 0.4) !important;
+        border-radius: 12px; /* Square with rounded corners matches your cards */
+        color: #a361ff !important;
+        box-shadow: 0 0 15px rgba(163, 97, 255, 0.2);
+        transition: all 0.3s ease;
+        transition: opacity 0.3s ease, transform 0.3s ease !important;
+    }
+
+    .admin-toggle-btn:hover {
+        background: rgba(163, 97, 255, 0.3) !important;
+        transform: scale(1.05);
+        box-shadow: 0 0 25px rgba(163, 97, 255, 0.5);
+        color: white !important;
+    }
+
+    .admin-toggle-btn i {
+        font-size: 1.4rem;
+    }
+    /* Ensure the sidebar itself has a nice purple glow border */
+    /* #adminSidebar {
+        border-right: 2px solid #a361ff !important;
+        box-shadow: 10px 0 25px rgba(163, 97, 255, 0.2);
+    } */
+    /* Glassmorphism Sidebar */
+    #adminSidebar {
+        background: rgba(20, 20, 35, 0.8) !important; 
+        -webkit-backdrop-filter: blur(15px);
+        backdrop-filter: blur(15px);
+        border-right: 1px solid rgba(163, 97, 255, 0.3) !important;
+        box-shadow: 10px 0 30px rgba(0, 0, 0, 0.5);
+        color: #ffffff;
+    }
+
+    /* Header with Gradient Text */
+    .offcanvas-header {
+        border-bottom: 1px solid rgba(163, 97, 255, 0.2);
+    }
+
+    .offcanvas-title {
+        letter-spacing: 1.5px;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background: linear-gradient(45deg, #ffffff, #a361ff);
+    }
+
+    /* Elegant Sidebar Buttons */
+    .sidebar-btn {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(163, 97, 255, 0.2);
+        color: #e0e0e0;
+        transition: all 0.3s ease-in-out;
+        border-radius: 12px;
+        padding: 12px 18px;
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+    }
+
+    .sidebar-btn:hover {
+        background: rgba(163, 97, 255, 0.15);
+        border-color: #a361ff;
+        color: #ffffff;
+        transform: translateX(8px); /* Subtle slide effect */
+        box-shadow: 0 0 15px rgba(163, 97, 255, 0.2);
+    }
+
+    .sidebar-btn i {
+        font-size: 1.2rem;
+        color: #a361ff;
+        margin-right: 15px;
+    }
+
+    /* Database Info Card */
+    .db-info-card {
+        background: rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 12px;
+        padding: 15px;
+        font-size: 0.85rem;
+    }
+    </style>
+</head>
+<body>
+    <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 2000;">
+        <div id="successToast" class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body">
+                    <i class="bi bi-check-circle-fill me-2"></i> Record deleted successfully!
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
+    <!-- <button class="btn btn-outline-light position-fixed" type="button" 
+        data-bs-toggle="offcanvas" data-bs-target="#adminSidebar" 
+        style="top: 25px; left: 20px; z-index: 1100;" 
+        title="Admin Menu"> <i class="bi bi-list" style="font-size: 1.5rem;"></i>
+    </button>        -->
+    <button id="toggleBtn" class="btn admin-toggle-btn position-fixed shadow" type="button" 
+        data-bs-toggle="offcanvas" data-bs-target="#adminSidebar" 
+        style="top: 25px; left: 25px; z-index: 1100; width: 50px; height: 50px; border-radius: 12px; background: rgba(163, 97, 255, 0.2); backdrop-filter: blur(10px); border: 1px solid rgba(163, 97, 255, 0.4); color: #a361ff;"
+        title="Admin Menu">
+        <i class="bi bi-grid-fill" style="font-size: 1.5rem;"></i>
+    </button>
+    <!-- <div class="offcanvas offcanvas-start bg-dark text-white" tabindex="-1" id="adminSidebar" style="width: 300px; border-right: 1px solid #a361ff;">
+        <div class="offcanvas-header border-bottom border-secondary">
+            <h5 class="offcanvas-title fw-bold">ADMIN PANEL</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" title="Close admin menu"></button>
+        </div>
+        <div class="offcanvas-body">
+            <div class="d-grid gap-3">
+                <h6 class="text-uppercase small opacity-50">Manage Records</h6>
+                <button class="btn btn-custom text-start" data-bs-toggle="modal" data-bs-target="#addRecordModal">
+                    <i class="bi bi-plus-circle me-2"></i> Add New Record
+                </button>
+                <a href="/export-word" class="btn btn-outline-info text-start">
+                    <i class="bi bi-file-earmark-word me-2"></i> Export to Word
+                </a>
+                <hr>
+                <h6 class="text-uppercase small opacity-50">Database Info</h6>
+                <p class="small text-secondary">Connected: <b>hackathon.db</b></p>
+                <hr class="opacity-25">
+                <a href="/logout" class="btn btn-outline-danger w-100 text-start">
+                    <i class="bi bi-box-arrow-right me-2"></i> Logout
+                </a>
+            </div>
+        </div>
+    </div> -->
+    <!-- <div class="offcanvas offcanvas-start shadow-lg border-0" tabindex="-1" id="adminSidebar" style="width: 320px; background: #1a1a2e !important;">
+    
+        <div style="height: 6px; background: linear-gradient(90deg, #a361ff, #61dafb); width: 100%;"></div>
+
+        <div class="offcanvas-header px-4 mt-3" style="border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 20px;">
+            <h5 class="fw-bold mb-0 d-flex align-items-center" style="color: #ffffff !important; white-space: nowrap;">
+                <i class="bi bi-shield-lock-fill me-2" style="color: #61dafb;"></i>
+                ADMIN CONSOLE</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
+        </div> -->
+    <div class="offcanvas offcanvas-start shadow-lg border-0" tabindex="-1" id="adminSidebar" style="width: 320px; background: #1a1a2e !important; color: white !important;">
+    
+        <div style="height: 6px; background: linear-gradient(90deg, #a361ff, #61dafb); width: 100%; position: absolute; top: 0; left: 0;"></div>
+
+        <div class="offcanvas-header px-4" style="margin-top: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 20px;">
+            <div class="d-flex align-items-center">
+                <i class="bi bi-shield-lock-fill me-2" style="color: #61dafb; font-size: 1.2rem;"></i>
+                <h5 class="fw-bold mb-0" style="color: #ffffff !important; white-space: nowrap; font-size: 1.1rem; text-transform: uppercase;">
+                    Admin Console
+                </h5>
+            </div>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+    
+        <div class="offcanvas-body d-flex flex-column px-4">
+            <p class="text-uppercase small opacity-50 mb-3" style="letter-spacing: 2px; font-size: 0.75rem;">Management</p>
+            
+            <button class="sidebar-btn w-100 border-0 mb-2" data-bs-toggle="modal" data-bs-target="#addRecordModal">
+                <i class="bi bi-plus-circle-fill"></i> Add New Entry
+            </button>
+
+            <a href="/export-word" class="sidebar-btn w-100 text-decoration-none mb-2">
+                <i class="bi bi-file-earmark-arrow-down-fill"></i> Generate Report
+            </a>
+
+            <div class="my-4 border-top border-secondary opacity-25"></div>
+
+            <p class="text-uppercase small opacity-50 mb-3" style="letter-spacing: 2px; font-size: 0.75rem;">System Status</p>
+            <div class="db-info-card mb-4">
+                <div class="d-flex justify-content-between mb-2">
+                    <span class="opacity-75">Database:</span>
+                    <span class="text-info">SQLite3</span>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <span class="opacity-75">Connection:</span>
+                    <span class="text-success fw-bold">Online</span>
+                </div>
+            </div>
+            <!-- new added for see user profile login -->
+            <div class="mt-auto pt-4">
+                <div class="d-flex align-items-center mb-3 p-2 rounded-3" style="background: rgba(163, 97, 255, 0.1); border: 1px solid rgba(163, 97, 255, 0.2);">
+                    <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center shadow-sm" style="width: 35px; height: 35px;">
+                        <i class="bi bi-person-fill text-white"></i>
+                    </div>
+                    <div class="ms-3">
+                        <p class="mb-0 small opacity-50 text-uppercase" style="font-size: 0.65rem; letter-spacing: 1px;">Logged in as</p>
+                        <p class="mb-0 fw-bold text-white small">{{ user_name }}</p>
+                    </div>
+                </div>
+            <a href="/logout" class="sidebar-btn text-danger border-danger border-opacity-25 mt-auto text-decoration-none">
+                <i class="bi bi-power text-danger"></i> Terminate Session
+            </a>
+        </div>
+    </div>
+    </div>
+    <nav class="navbar navbar-dark mb-5">
+        <div class="container d-flex justify-content-between align-items-center">
+            
+            <span class="navbar-brand">
+                CSE Department | <span style="color: #a361ff;">Hackathon Portal</span>
+            </span>
+            
+            <div class="d-flex align-items-center">
+                <!-- <a href="/login" class="btn btn-auth-nav me-4">
+                    <i class="bi bi-person-fill"></i> Sign In
+                </a> -->
+                
+                <div class="logo-container">
+                    <img src="{{ url_for('static', filename='bitm-logo.png') }}" 
+                        alt="BITM Logo" 
+                        class="bitm-logo-large">
+                </div>
+            </div>
+        </div>
+    </nav>
+
+<style>
+    /* New Button Style for the Navbar */
+    .btn-auth-nav {
+        background: linear-gradient(135deg, #a361ff, #ff5e91);
+        color: white !important;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        padding: 10px 25px;
+        border-radius: 8px;
+        border: none;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        box-shadow: 0 4px 15px rgba(163, 97, 255, 0.3);
+    }
+
+    .btn-auth-nav:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(255, 94, 145, 0.5);
+        filter: brightness(1.1);
+    }
+
+    /* Ensure the navbar height accommodates the new button and logo */
+    .navbar {
+        min-height: 110px;
+        background: rgba(13, 14, 26, 0.85) !important;
+        -webkit-backdrop-filter: blur(20px);
+        backdrop-filter: blur(20px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+</style>
+
+<!-- <nav class="navbar navbar-dark mb-5 position-relative">
+    <div class="container d-flex align-items-center justify-content-between">
+        <span class="navbar-brand h1 fw-bold" style="font-size: 1.8rem;">
+            CSE Department | <span style="color: #a361ff;">Hackathon Portal</span>
+        </span>
+        
+        <div class="logo-container">
+            <img src="{{ url_for('static', filename='bitm-logo.png') }}" 
+                 alt="BITM Logo" 
+                 class="bitm-logo-large">
+        </div>
+    </div>
+</nav> -->
+
+<!-- <nav class="navbar navbar-dark mb-5">
+    <div class="d-flex align-items-center">
+        <a href="/login" class="btn btn-custom me-3">Login</a>
+        <img src="{{ url_for('static', filename='bitm-logo.png') }}" class="bitm-logo-large">
+    </div>
+    <div class="container d-flex justify-content-between align-items-center">
+        <span class="navbar-brand h1 fw-bold" style="font-size: 1.8rem;">CSE Department | <span style="color: #a361ff;">Hackathon Portal</span></span>
+        <img src="{{ url_for('static', filename='bitm-logo.png') }}" alt="BITM Logo" style="height: 90px; filter: brightness(1.2);">
+    </div>
+</nav> -->
+
+<div class="container">
+    <div class="d-flex justify-content-center mb-5">
+        <a href="/dashboard" class="btn btn-custom {% if not current_year or current_year == 'All' %}active{% endif %}">
+            All Records
+        </a>
+        
+        {% for year in available_years %}
+        <a href="/dashboard?year={{ year }}" class="btn btn-custom {% if current_year == year %}active{% endif %}">
+            {{ year }}
+        </a>
+        {% endfor %}
+    </div>
+
+    <div class="row mb-5">
+        <div class="col-md-4">
+            <div class="card stats-card p-4 text-center">
+                <p class="stats-label" style="color: #ff5e91 !important;">Total Participations</p> 
+                <h2 class="stats-value" >{{ records|length }}</h2> 
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card stats-card p-4 text-center">
+                <p class="stats-label" style="color: #ff5e91 !important;">High Prize Won</p>
+                <h2 class="stats-value">₹ 50,000/-</h2>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card stats-card p-4 text-center">
+                <p class="stats-label" style="color: #00d2ff !important;">Active Years</p>
+                <h2 class="stats-value">2023 - 2026</h2>
+            </div>
+        </div>
+    </div>
+    <!-- <div class="d-flex justify-content-center mb-5">
+        <a href="/" class="btn btn-custom {% if not current_year or current_year == 'All' %}active{% endif %}">
+            All Records
+        </a>
+        
+        {% for year in available_years %}
+        <a href="/?year={{ year }}" class="btn btn-custom {% if current_year == year %}active{% endif %}">
+            {{ year }}
+        </a>
+        {% endfor %}
+    </div> -->
+    <div class="table-container mb-5">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h4 class="fw-bold">Student Participation Records</h4>
+            <input type="text" id="searchInput" class="form-control w-25" placeholder="Search name or event...">
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover align-middle" id="hackathonTable">
+                <thead>
+                    <tr>
+                        <th class="py-3">Student Name</th>
+                        <th class="py-3">Event Name</th>
+                        <th class="py-3">Date</th>
+                        <th class="py-3">Venue</th>
+                        <th class="py-3">Prizes</th>
+                        <th class="text-center">Action</th> </tr>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in records %}
+                    <tr>
+                        <td class="fw-bold text-white">{{ row['name'] }}</td>
+                        <td>{{ row['event_name'] }}</td>
+                        <td>{{ row['date'] }}</td>
+                        <td>{{ row['venue'] }}</td>
+                        <td>
+                            {% if row['final_prize'] and row['final_prize'] != 'None' %}
+                                <span class="badge rounded-pill bg-warning text-dark px-3 shadow-sm">
+                                    <i class="bi bi-trophy-fill me-1"></i> {{ row['final_prize'] }}
+                                </span>
+                            {% else %}
+                                <span class="text-muted opacity-25">-</span>
+                            {% endif %}
+                        </td>
+                        <!-- <td>
+                            {% if row['prizes'] %}
+                                <span class="badge rounded-pill bg-warning text-dark">{{ row['prizes'] }}</span>
+                            {% else %}
+                                <span class="text-muted opacity-25">-</span>
+                            {% endif %}
+                        </td> -->
+                        <!-- <td>
+                            {% if row['remarks'] %}
+                                <span class="badge badge-winner">{{ row['remarks'] }}</span>
+                            {% endif %}
+                        </td> -->
+                        <td class="text-center">
+                            <a href="/delete-record/{{ row['id'] }}" 
+                            class="btn btn-danger btn-sm px-3 shadow-sm" 
+                            onclick="return confirm('Permanently delete this record?')"
+                            style="font-weight: bold; letter-spacing: 0.5px;">
+                            DELETE
+                            </a>
+                        </td>
+                        <!-- <td class="text-center">
+                            <a href="/delete-record/{{ row['id'] }}" 
+                            class="btn btn-sm btn-outline-danger border-0" 
+                            onclick="return confirm('Are you sure you want to delete this record?')">
+                                <i class="bi bi-trash3"></i>
+                            </a>
+                        </td> -->
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <!-- <table class="table align-middle"> -->
+                <!-- <thead>
+                    <tr>
+                        <th>Student Name</th>
+                        <th>Event Name</th>
+                        <th>Date</th>
+                        <th>Venue</th>
+                        <th class="text-center">Actions</th> </tr>
+                </thead> -->
+                <!-- <tbody>
+                    {% for row in records %}
+                    <tr>
+                        <td class="fw-bold text-white">{{ row.student_name }}</td>
+                        <td class="opacity-75">{{ row.event_name }}</td>
+                        <td><small class="text-info">{{ row.date }}</small></td>
+                        <td class="opacity-75">{{ row.venue }}</td>
+                        <td class="text-center">
+                            <a href="/delete-record/{{ row.id }}" 
+                            class="btn btn-sm btn-outline-danger border-0" 
+                            onclick="return confirm('Are you sure you want to delete this record?')">
+                                <i class="bi bi-trash3"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody> -->
+            <!-- </table> -->
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('searchInput').addEventListener('keyup', function() {
+        let filter = this.value.toUpperCase();
+        let rows = document.querySelector("#hackathonTable tbody").rows;
+        for (let i = 0; i < rows.length; i++) {
+            let text = rows[i].innerText.toUpperCase();
+            rows[i].style.display = text.indexOf(filter) > -1 ? "" : "none";
+        }
+    });
+</script>
+<div class="modal fade" id="addRecordModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content bg-dark text-white border-primary">
+            <div class="modal-header border-secondary">
+                <h5 class="modal-title">Add New Hackathon Entry</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" title="Close modal"></button>
+            </div>
+            <form action="/add-record" method="POST">
+                <div class="modal-body">
+                    <input type="text" name="student_name" class="form-control mb-3" placeholder="Student Name" required>
+                    <input type="text" name="event_name" class="form-control mb-3" placeholder="Event Name" required>
+                    <input type="text" name="date" class="form-control mb-3" placeholder="Date (e.g., 2026-03-18)" required>
+                    <input type="text" name="venue" class="form-control mb-3" placeholder="Venue" required>
+                    <label class="form-label small opacity-50 text-white mt-2">Prizes / Remarks (Optional)</label>
+                    <input type="text" name="prizes" class="form-control mb-3" placeholder="e.g. 1st Place, Winner, or Gold Medal">
+                </div>
+
+                <div class="modal-footer border-secondary">
+                    <button type="submit" class="btn btn-custom">Save Record</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 2000;">
+    <div id="successToast" class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body">
+                <i class="bi bi-check-circle-fill me-2"></i> Action completed successfully!
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<!-- <script>
+    // Wait for the page to load
+    document.addEventListener('DOMContentLoaded', function () {
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                var toastEl = document.getElementById('successToast');
+                var toast = new bootstrap.Toast(toastEl);
+                toast.show();
+            {% endif %}
+        {% endwith %}
+    });
+</script> -->
+<script>
+    const adminSidebar = document.getElementById('adminSidebar');
+    const toggleBtn = document.getElementById('toggleBtn');
+
+    // When the sidebar starts to open, hide the button
+    adminSidebar.addEventListener('show.bs.offcanvas', function () {
+        toggleBtn.style.opacity = '0';
+        toggleBtn.style.pointerEvents = 'none'; // Prevents clicking it while invisible
+    });
+
+    // When the sidebar starts to close, show the button again
+    adminSidebar.addEventListener('hide.bs.offcanvas', function () {
+        toggleBtn.style.opacity = '1';
+        toggleBtn.style.pointerEvents = 'auto';
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account | Hackathon Portal</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+        body {
+            background: radial-gradient(circle at top right, #2d1b4d, #161b33 50%, #0d0e1a);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Inter', sans-serif;
+            color: white;
+            padding: 40px 0;
+        }
+
+        .auth-card {
+            background: rgba(20, 20, 35, 0.9);
+            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(20px);
+            padding: 40px;
+            border-radius: 24px;
+            width: 100%;
+            max-width: 480px;
+            border-top: 4px solid #a361ff;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6);
+        }
+
+        .form-label-custom {
+            display: block;
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 8px;
+        }
+
+        .form-control {
+            background: rgba(255, 255, 255, 0.05) !important;
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            color: white !important;
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 20px;
+        }
+
+        /* Password Requirements Box */
+        .requirements-box {
+            background: rgba(13, 14, 26, 0.6);
+            border: 1px solid rgba(163, 97, 255, 0.2);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 20px;
+            font-size: 0.8rem;
+        }
+        .requirement-met {
+            color: #00ff88 !important; /* Bright Green */
+            font-weight: bold;
+            opacity: 1 !important;
+        }
+
+        .requirement-met::before {
+            content: "✓" !important; /* Changes circle to checkmark */
+            margin-right: 8px;
+            color: #00ff88;
+        }
+        .requirements-box ul {
+            list-style: none;
+            padding-left: 0;
+            margin: 0;
+        }
+
+        .requirements-box li {
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 5px;
+        }
+
+        .requirements-box li::before {
+            content: "○";
+            margin-right: 8px;
+            color: #a361ff;
+        }
+
+        .btn-signup {
+            background: linear-gradient(135deg, #a361ff, #ff5e91);
+            border: none;
+            width: 100%;
+            padding: 14px;
+            font-weight: 700;
+            color: white;
+            border-radius: 12px;
+            text-transform: uppercase;
+            margin-top: 10px;
+        }
+
+        .back-link {
+            position: absolute;
+            top: 20px; left: 20px;
+            color: rgba(255, 255, 255, 0.5);
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+    <a href="/" class="back-link">← Back to Home</a>
+
+    <div class="auth-card">
+        <div class="text-center mb-4">
+            <h2 class="fw-bold mb-1">CREATE ACCOUNT</h2>
+            <p class="small opacity-50">Join for the ultimate portal experience</p>
+        </div>
+
+        <form action="/signup" method="POST">
+            <span class="form-label-custom">Full Name</span>
+            <input type="text" name="fullname" class="form-control" placeholder="Enter your full name" required>
+
+            <span class="form-label-custom">Email Address</span>
+            <input type="email" name="email" class="form-control" placeholder="Enter your email" required>
+<!-- 
+            <span class="form-label-custom">Password</span>
+            <input type="password" name="password" id="password" class="form-control" placeholder="Create a password" required> -->
+            <span class="form-label-custom">Password</span>
+            <div class="position-relative">
+                <input type="password" name="password" id="password" class="form-control" placeholder="Create a password" required>
+                <i class="bi bi-eye-slash" id="togglePassword" 
+                style="position: absolute; right: 15px; top: 12px; cursor: pointer; color: rgba(255,255,255,0.5); font-size: 1.2rem;"></i>
+            </div>
+
+            <div class="requirements-box">
+                <p class="fw-bold mb-2" style="font-size: 0.75rem;">Password Requirements:</p>
+                <ul>
+                    <li id="req-length">At least 8 characters</li>
+                    <li id="req-upper">At least one uppercase letter (A-Z)</li>
+                    <li id="req-lower">At least one lowercase letter (a-z)</li>
+                    <li id="req-number">At least one number (0-9)</li>
+                    <li id="req-special">At least one special character (!@#$%^&*)</li>
+                </ul>
+            </div>
+
+            <span class="form-label-custom">Confirm Password</span>
+            <input type="password" name="confirm_password" class="form-control" placeholder="Confirm your password" required>
+
+            <button type="submit" class="btn-signup">CREATE ACCOUNT</button>
+        </form>
+
+        <div class="text-center mt-4 small opacity-50">
+            Already have an account? <a href="/login" style="color: #a361ff; text-decoration: none;">Sign In</a>
+        </div>
+    </div>
+    <script>
+        const passwordInput = document.getElementById('password');
+        const togglePassword = document.querySelector('#togglePassword');
+        const passwordField = document.querySelector('#password');
+
+        togglePassword.addEventListener('click', function () {
+            // 1. Toggle the type attribute (password <-> text)
+            const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordField.setAttribute('type', type);
+            
+            // 2. Toggle the icon (eye <-> eye-slash)
+            this.classList.toggle('bi-eye');
+            this.classList.toggle('bi-eye-slash');
+        });
+        const requirements = {
+            length: document.getElementById('req-length'),
+            upper: document.getElementById('req-upper'),
+            lower: document.getElementById('req-lower'),
+            number: document.getElementById('req-number'),
+            special: document.getElementById('req-special')
+        };
+
+        passwordInput.addEventListener('input', () => {
+            const val = passwordInput.value;
+
+            // Check each condition using Regular Expressions (Regex)
+            const tests = {
+                length: val.length >= 8,
+                upper: /[A-Z]/.test(val),
+                lower: /[a-z]/.test(val),
+                number: /[0-9]/.test(val),
+                special: /[!@#$%^&*]/.test(val)
+            };
+
+            // Loop through results and toggle the 'requirement-met' class
+            Object.keys(tests).forEach(key => {
+                if (tests[key]) {
+                    requirements[key].classList.add('requirement-met');
+                } else {
+                    requirements[key].classList.remove('requirement-met');
+                }
+            });
+        });
+</script>
+</body>
+</html>

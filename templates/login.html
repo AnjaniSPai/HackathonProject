@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | Hackathon Portal</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            background: radial-gradient(circle at top right, #2d1b4d, #161b33 50%, #0d0e1a);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Inter', sans-serif;
+            color: white;
+            margin: 0;
+        }
+
+        .auth-card {
+            background: rgba(20, 20, 35, 0.85);
+            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(20px);
+            padding: 50px 40px;
+            border-radius: 24px;
+            width: 100%;
+            max-width: 400px;
+            border-top: 4px solid #a361ff;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6);
+            text-align: center;
+        }
+
+        .form-control {
+            background: rgba(255, 255, 255, 0.06) !important;
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            color: white !important;
+            padding: 14px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+
+        .btn-login {
+            background: linear-gradient(135deg, #a361ff, #ff5e91);
+            border: none;
+            width: 100%;
+            padding: 14px;
+            font-weight: 700;
+            color: white;
+            border-radius: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: 0.3s;
+        }
+
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(163, 97, 255, 0.4);
+        }
+
+        .back-link {
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            color: rgba(255, 255, 255, 0.5);
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <a href="/" class="back-link">← BACK TO HOME</a>
+
+    <div class="auth-card">
+        <h2 class="fw-bold mb-1">WELCOME BACK</h2>
+        <p class="small opacity-50 mb-5">Sign in to manage the Portal</p>
+
+        <form action="/login" method="POST">
+            <div class="text-start mb-1 small opacity-75">Email Address</div>
+            <input type="email" name="email" class="form-control" placeholder="Enter your email" required>
+
+            <div class="text-start mb-1 small opacity-75">Password</div>
+            <input type="password" name="password" class="form-control" placeholder="Enter your password" required>
+
+            <button type="submit" class="btn-login">SIGN IN</button>
+        </form>
+
+        <p class="mt-4 small opacity-50">New user? <a href="/signup" style="color: #a361ff; text-decoration: none;">Create Account</a></p>
+    </div>
+</body>
+</html>
