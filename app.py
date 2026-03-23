@@ -278,6 +278,20 @@ def init_users_db():
 # Initialize the user table on startup
 init_users_db()
 
+with app.app_context():
+    db = get_db_connection()
+    # Create the table if it doesn't exist
+    db.execute('CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, fullname TEXT, email TEXT UNIQUE, password TEXT)')
+    
+    # Add a MASTER ACCOUNT for your demo
+    try:
+        db.execute('INSERT INTO users (fullname, email, password) VALUES (?, ?, ?)', 
+                   ('Admin User', 'admin@test.com', 'admin123'))
+        db.commit()
+    except:
+        pass # Email already exists, no need to add again
+    db.close()
+
 # --- AUTHENTICATION ROUTES ---
 
 @app.route('/')
@@ -518,16 +532,30 @@ if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', port=port)
 
-# This ensures the 'users' table exists as soon as the app starts
+# # This ensures the 'users' table exists as soon as the app starts
+# with app.app_context():
+#     db = get_db_connection()
+#     db.execute('''
+#         CREATE TABLE IF NOT EXISTS users (
+#             id INTEGER PRIMARY KEY AUTOINCREMENT,
+#             fullname TEXT NOT NULL,
+#             email TEXT UNIQUE NOT NULL,
+#             password TEXT NOT NULL
+#         )
+#     ''')
+#     db.commit()
+#     db.close()
+# Create a permanent account for the demo
 with app.app_context():
-    db = get_db_connection()
-    db.execute('''
-        CREATE TABLE IF NOT EXISTS users (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            fullname TEXT NOT NULL,
-            email TEXT UNIQUE NOT NULL,
-            password TEXT NOT NULL
-        )
-    ''')
-    db.commit()
-    db.close()
+    conn = get_db_connection()
+    # Ensure table exists
+    conn.execute('''CREATE TABLE IF NOT EXISTS users 
+                 (id INTEGER PRIMARY KEY AUTOINCREMENT, fullname TEXT, email TEXT UNIQUE, password TEXT)''')
+    # Add a demo user (ignores if already exists)
+    try:
+        conn.execute('INSERT INTO users (fullname, email, password) VALUES (?, ?, ?)',
+                     ('Admin', 'admin@test.com', 'admin123'))
+        conn.commit()
+    except:
+        pass
+    conn.close()
